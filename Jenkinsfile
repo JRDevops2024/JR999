@@ -1,5 +1,5 @@
 pipeline {
-  agent 'Devagentlinux'
+  agent 'uatagentlinux'
 
   parameters {
     string(defaultValue: '', description: 'MySQL Hostname', name: 'MYSQL_HOST')
@@ -13,7 +13,7 @@ pipeline {
     stage('Checkout Source Code') {
       steps {
         // Checkout the source code from your Git repository
-        git credentialsId: 'Github-Jenkins', url: 'https://github.com/JRDevops2024/JR999.git', branch: 'dev'
+        git credentialsId: 'Github-Jenkins', url: 'https://github.com/JRDevops2024/JR999.git', branch: 'uat'
       }
     }
     stage('Build Docker Image') {
