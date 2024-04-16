@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent 'Devagentlinux'
 
   parameters {
     string(defaultValue: '', description: 'MySQL Hostname', name: 'MYSQL_HOST')
@@ -24,11 +24,11 @@ pipeline {
 
           // Pass MySQL details as environment variables during build
           def envVars = [
-              "MYSQL_HOST": "${params.MYSQL_HOST}",
-              "MYSQL_PORT": "${params.MYSQL_PORT}",
-              "MYSQL_DATABASE": "${params.MYSQL_DATABASE}",
-              "MYSQL_USER": "${params.MYSQL_USER}",
-              "MYSQL_PASSWORD": "${params.MYSQL_PASSWORD}"
+            "MYSQL_HOST": "${params.MYSQL_HOST}",
+            "MYSQL_PORT": "${params.MYSQL_PORT}",
+            "MYSQL_DATABASE": "${params.MYSQL_DATABASE}",
+            "MYSQL_USER": "${params.MYSQL_USER}",
+            "MYSQL_PASSWORD": "${params.MYSQL_PASSWORD}"
           ]
 
           // Build the Docker image with environment variables
@@ -36,7 +36,6 @@ pipeline {
         }
       }
     }
-
     stage('Push Docker Image') {
       steps {
         script {
@@ -48,6 +47,15 @@ pipeline {
             docker.image(dockerImageTag).push()
           }
         }
+      }
+    }
+    stage('Deploy to Kubernetes') {
+      steps {
+        // deploy.sh is located in the workspace root
+    
+        sh 'sh deploy.sh ${params.KUBERNETES_NAMESPACE} ${other_arguments}'
+
+        // Granting Kubernetes access might require additional steps (e.g., using credentials or service account)
       }
     }
   }
