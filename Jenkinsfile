@@ -1,5 +1,5 @@
 pipeline {
-  agent 'Devagentlinux'
+  agent 'uatagentlinux'
 
   parameters {
     string(defaultValue: '', description: 'MySQL Hostname', name: 'MYSQL_HOST')
